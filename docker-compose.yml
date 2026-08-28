@@ -1,0 +1,81 @@
+services:
+  locker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: locker-for-you:latest
+    container_name: locker-for-you
+    restart: unless-stopped
+
+    # Publicado SOLO en loopback: delante va el reverse proxy con su TLS
+    # (DRAPPS-1035). Exponer el puerto crudo a internet dejaria la app
+    # accesible por HTTP plano saltandose el proxy, y en una boveda cifrada
+    # eso significa mandar el authKey en claro.
+    ports:
+      - '127.0.0.1:${LOCKER_PORT:-4322}:3000'
+
+    environment:
+      NODE_ENV: production
+      MAX_FILE_SIZE: ${MAX_FILE_SIZE:-52428800}
+      # Detras del proxy, sin esto request.ip seria siempre 127.0.0.1 y el
+      # rate limit por IP no serviria de nada (DRAPPS-1043).
+      TRUST_PROXY: ${TRUST_PROXY:-true}
+      # Obligatoria: el servidor se niega a arrancar en produccion sin
+      # ella. Vive en el .env del SERVIDOR, nunca en el repo.
+      # Entrecomillado: sin las comillas, los dos puntos del mensaje de error
+      # hacen que YAML lo lea como un mapa anidado y el fichero deja de ser
+      # valido.
+      SALT_PEPPER: '${SALT_PEPPER:?generala con openssl rand -base64 32}'
+      # Cifra el secreto del segundo factor en la base de datos. Quien
+      # vuelque la BD sin tener tambien este .env no puede generar codigos.
+      TOTP_KEY: '${TOTP_KEY:?generala con openssl rand -base64 32}'
+      # Avisos de intentos de acceso (DRAPPS-1058). Opcionales: sin ellas la
+      # app funciona igual y simplemente no manda correo. Un aviso que no se
+      # puede enviar nunca debe impedir entrar en la boveda.
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      AVISO_DESTINO: ${AVISO_DESTINO:-}
+
+    volumes:
+      # El activo real del proyecto. Si se pierden estos dos volumenes se
+      # pierde la boveda: son lo que respalda DRAPPS-1052.
+      - locker_data:/data/db
+      - locker_blobs:/data/blobs
+
+    # distroless no tiene shell ni 'node' en el PATH: el binario vive en
+    # /nodejs/bin/node. Con 'node' a secas el healthcheck falla siempre con
+    # "executable file not found" y el contenedor queda unhealthy aunque la
+    # app responda perfectamente.
+    healthcheck:
+      test:
+        [
+          'CMD',
+          '/nodejs/bin/node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+    # La app no necesita escribir fuera de los volumenes.
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+volumes:
+  locker_data:
+    name: locker_data
+  locker_blobs:
+    name: locker_blobs

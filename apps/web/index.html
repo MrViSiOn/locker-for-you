@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Locker</title>
+    <!--
+      Ni una sola referencia a un dominio ajeno, y es intencionado: en una app
+      que descifra claves privadas en esta misma pagina, cualquier tercero que
+      sirva un recurso esta en posicion de sustituirlo. Las fuentes se sirven
+      desde aqui (ver ui/estilos.css) y los estilos globales viajan en el
+      bundle, no en un <style> suelto que obligaria a relajar la CSP.
+    -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

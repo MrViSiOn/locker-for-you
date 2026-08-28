@@ -1,0 +1,25 @@
+node_modules
+**/node_modules
+**/dist
+**/dist-types
+**/*.tsbuildinfo
+coverage
+
+.git
+.github
+.vscode
+.idea
+
+# Datos de la boveda: no deben entrar jamas en el contexto de build.
+data
+*.db
+*.db-shm
+*.db-wal
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+README.md
+*.log

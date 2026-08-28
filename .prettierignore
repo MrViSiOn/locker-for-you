@@ -1,0 +1,11 @@
+dist
+dist-types
+node_modules
+package-lock.json
+*.tsbuildinfo
+
+# El canvas de diseno se siembra LITERALMENTE desde estos ficheros: lo que
+# Prettier reordene aqui, aparece reordenado en la pagina publicada. Se quedan
+# tal y como los escribio (o los edito) el disenador.
+design/**/*.dc.html
+design/*.html

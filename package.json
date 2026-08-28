@@ -1,0 +1,38 @@
+{
+  "name": "locker-for-you",
+  "version": "0.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Boveda personal de ficheros con cifrado extremo a extremo (zero-knowledge)",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @locker/shared && npm run build -w @locker/crypto && npm run build -w @locker/api && npm run build -w @locker/web",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev": "concurrently -n api,web -c blue,magenta \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "npm run dev -w @locker/api",
+    "dev:web": "npm run dev -w @locker/web",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --build --force"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.2",
+    "@vitest/coverage-v8": "^4.1.11",
+    "concurrently": "^9.1.0",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1",
+    "vitest": "^4.1.11"
+  }
+}

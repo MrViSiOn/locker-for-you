@@ -1,0 +1,42 @@
+# Dependencias
+node_modules/
+
+# Compilados
+dist/
+dist-types/
+*.tsbuildinfo
+coverage/
+
+# ---------------------------------------------------------------------------
+# DATOS DE LA BOVEDA. Nunca deben acabar en git.
+# La BD lleva metadatos (email, hash del authKey, forma del arbol) y los blobs
+# son los ficheros cifrados del usuario. Un commit accidental de esto seria
+# irreversible: git conserva el historial.
+# ---------------------------------------------------------------------------
+data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Secretos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+locker-recovery.txt
+.dropbox_uploader
+
+# Documentacion con datos reales del despliegue (rutas, hosts, correos). Se
+# queda en la maquina: el repo es publico y ese detalle es un mapa para quien
+# entre en el servidor.
+*.local.md
+
+# Entorno local
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

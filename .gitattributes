@@ -1,0 +1,20 @@
+# Normalizacion de finales de linea.
+#
+# Sin esto, un fichero commiteado desde Windows viaja con CRLF y en el
+# servidor los scripts fallan con "bad interpreter: /bin/bash^M" -- un error
+# que no dice en absoluto cual es el problema real. Afecta sobre todo a los
+# scripts de backup (DRAPPS-1052) y al Dockerfile.
+* text=auto eol=lf
+
+# Binarios: que git no toque nada.
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+
+# Los blobs cifrados nunca deberian llegar a git (los excluye .gitignore),
+# pero si alguno se colara, que no se corrompa por conversion de saltos.
+*.bin binary
+*.enc binary

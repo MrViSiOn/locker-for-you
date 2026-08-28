@@ -1,0 +1,90 @@
+/*
+ * Fuentes y estilos globales.
+ *
+ * LAS FUENTES SE SIRVEN DESDE AQUI, NO DESDE GOOGLE, y no es una manía:
+ * cada visita a Google Fonts le cuenta a un tercero cuándo abres tu bóveda
+ * y desde qué IP, y obliga a abrirle la CSP a dos dominios más. Un
+ * proveedor de fuentes comprometido sirve CSS, y el CSS puede filtrar datos
+ * a base de selectores. Aquí no entra nadie de fuera.
+ *
+ * Solo se baja el subconjunto `latin`: cubre el castellano entero (acentos,
+ * eñe y signos de apertura) y ahorra los alfabetos que esta app no usará
+ * nunca. Los cinco ficheros suman ~105 KB.
+ */
+
+/* Archivo es una fuente variable: un solo fichero cubre de 400 a 600. */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fuentes/archivo-normal-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fuentes/ibm-plex-mono-normal-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fuentes/ibm-plex-mono-normal-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fuentes/instrument-serif-normal-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fuentes/instrument-serif-italic-400.woff2') format('woff2');
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #000000;
+  color: oklch(0.94 0.006 88);
+  font-family: 'Archivo', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: oklch(0.72 0.115 75);
+}
+
+a:hover {
+  color: oklch(0.79 0.115 75);
+}
+
+/* El foco tiene que verse: aqui un clic errado puede ser un borrado. */
+:focus-visible {
+  outline: 2px solid oklch(0.72 0.115 185);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: oklch(0.72 0.115 75 / 0.3);
+}
